@@ -1,8 +1,30 @@
+'''A game setting in the Cypher System
+
+Represents the model and associated helper functions for 
+characters and character sheets.
+'''
 
 class Game(object):
+    '''A game setting in the Cypher System
+
+    Data is stored in self.setting, in exactly the format that matches
+    the document database and YAML export formats.
+    '''
+
     def __init__(self, **kw):
-        self.campaign = {}
-        self.campaign['name'] = kw.get('name', 'Name')
+        '''Create a game setting
+
+        Parameters:
+        name(str): Setting name
+        types(dict): Types available in the setting
+        abilities(dict): Abilities available in the setting
+        skills(list): List of the skills available in the setting
+
+        Use optional keyword parameters to set values in self.sheet.
+        '''
+
+        self.setting = {}
+        self.setting['name'] = kw.get('name', 'Name')
 
         #types = {
         #    'Name': {
@@ -34,7 +56,7 @@ class Game(object):
         #        'add_abilities': 3 #additional abilities
         #    }
         #}
-        self.campaign['types'] = kw.get('types', {})
+        self.setting['types'] = kw.get('types', {})
 
         #abilities = {
         #    'Name': {
@@ -45,8 +67,8 @@ class Game(object):
         #        } # {} if no cost
         #    }
         #}
-        self.campaign['abilities'] = kw.get('abilities', {})
+        self.setting['abilities'] = kw.get('abilities', {})
 
         #skills = ['Speed Defense', 'Archery', 'Hacking']
-        self.campaign['skills'] = kw.get('skills', [])
+        self.setting['skills'] = kw.get('skills', [])
 

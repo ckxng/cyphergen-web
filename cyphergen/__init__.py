@@ -1,14 +1,19 @@
+'''Cypher character generator for custom settings
+
+Present a website and API which allows GMs for the Cypher System RPG 
+to create settings, that players can then use to create Level 1 
+characters.
+'''
+
 import os
 from flask import Flask, jsonify, request
-from . import helper
-from . import character
-from . import game
+from . import helper, character, game
 
 app = Flask(__name__)
 app.config.from_mapping(
     DBCONN = os.environ.get('DBCONN'),
-    BASEURI = os.environ.get('BASEURI') or '',
-    APIPATH = os.environ.get('APIPATH') or '/api/v1'
+    BASEURI = os.environ.get('BASEURI', ''),
+    APIPATH = os.environ.get('APIPATH', '/api/v1')
 )
 app.helper = helper.Helper(app)
 
@@ -27,7 +32,7 @@ def get_game(id):
     return jsonify({
         'game': {
             'id': app.helper.uri('/games/'+id),
-            'campaign' : game.Game().campaign
+            'campaign' : game.Game().setting
         }
     })
 
