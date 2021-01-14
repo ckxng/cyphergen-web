@@ -20,20 +20,12 @@ app.helper = helper.Helper(app)
 
 
 @app.route('/')
-def index():
-    return redirect('/game/', code=301)
+def html_index():
+    return render_template('index.html')
 
-@app.route('/game/')
-def html_game():
-    return render_template('game.html')
-
-@app.route('/game/<id>/')
-def html_game_lookup(id):
-    return render_template('game.html')
-
-@app.route('/character/')
-def html_character():
-    return render_template('character.html')
+@app.route('/generate/<id>/')
+def html_generate(id):
+    return render_template('generate.html')
 
 @app.route('/character/<id>/')
 def html_character_lookup(id):
