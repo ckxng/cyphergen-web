@@ -32,6 +32,7 @@ class Game(object):
         Parameters:
         id(str): UUID
         name(str): Setting name
+        pools(dict): Mapping for pool names
         types(dict): Types available in the setting
         abilities(dict): Abilities available in the setting
         skills(list): List of the skills available in the setting
@@ -49,13 +50,24 @@ class Game(object):
             self.setting = {}
             self.setting['name'] = str(kw.get('name', 'Name'))
 
+            # 'pools': {
+            #     'might': 'Might',
+            #     'speed': 'Speed',
+            #     'intellect': 'Intellect'
+            # },
+            # pools
+            self.setting['pools'] = {}
+            pools = kw.get('pools', {})
+            self.setting['pools'] = {}
+            self.setting['pools']['might'] = str(
+                pools.get('might', 'Might'))
+            self.setting['pools']['speed'] = str(
+                pools.get('speed', 'Speed'))
+            self.setting['pools']['intellect'] = str(
+                pools.get('intellect', 'Intellect'))
+
             # types = {
             #    'Name': {
-            #        'pools': { #remap names for pools
-            #            'might': 'Might',
-            #            'speed': 'Speed',
-            #            'intellect': 'Intellect'
-            #        },
             #        'base_points': { #base points for pools
             #            'might': 8,
             #            'speed': 8,
@@ -84,17 +96,6 @@ class Game(object):
             for type in types.keys():
                 self.setting['types'][type] = {}
 
-                # pools
-                self.setting['types'][type]['pools'] = {}
-                pools = types[type].get('pools', {})
-                self.setting['types'][type]['pools'] = {}
-                self.setting['types'][type]['pools']['might'] = str(
-                    pools.get('might', 'Might'))
-                self.setting['types'][type]['pools']['speed'] = str(
-                    pools.get('speed', 'Speed'))
-                self.setting['types'][type]['pools']['intellect'] = str(
-                    pools.get('intellect', 'Intellect'))
-
                 # base_points
                 base_points = types[type].get('base_points', {})
                 self.setting['types'][type]['base_points'] = {}
@@ -108,7 +109,7 @@ class Game(object):
                 # add_points
                 self.setting['types'][type]['add_points'] = int(
                     types[type].get('add_points', 0))
-                
+
                 # edge
                 edge = types[type].get('edge', {})
                 self.setting['types'][type]['edge'] = {}
@@ -118,11 +119,11 @@ class Game(object):
                     edge.get('speed', 0))
                 self.setting['types'][type]['edge']['intellect'] = int(
                     edge.get('intellect', 0))
-                
+
                 # add_edge
                 self.setting['types'][type]['add_edge'] = int(
                     types[type].get('add_edge', 0))
-                
+
                 # base_skills
                 base_skills = types[type].get('base_skills', [])
                 self.setting['types'][type]['base_skills'] = []
@@ -133,18 +134,18 @@ class Game(object):
                 # add_skills
                 self.setting['types'][type]['add_skills'] = int(
                     types[type].get('add_skills', 0))
-                
+
                 # cyphers
                 self.setting['types'][type]['cyphers'] = int(
                     types[type].get('cyphers', 0))
-                
+
                 # base_abilities
                 base_abilities = types[type].get('base_abilities', [])
                 self.setting['types'][type]['base_abilities'] = []
                 for ability in base_abilities:
                     self.setting['types'][type]['base_abilities'].append(
                         str(ability))
-                
+
                 # add_abilities
                 self.setting['types'][type]['add_abilities'] = int(
                     types[type].get('add_abilities', 0))
@@ -164,18 +165,20 @@ class Game(object):
                 self.setting['abilities'][ability] = {}
 
                 # description
-                self.setting['abilities'][ability]['description'] = str(abilities[ability].get('description', ''))
+                self.setting['abilities'][ability]['description'] = str(
+                    abilities[ability].get('description', ''))
 
                 # enabler
                 enabler = int(abilities[ability].get('enabler', 0))
                 if enabler == 0 or enabler == 1:
                     self.setting['abilities'][ability]['enabler'] = enabler
-                
+
                 # cost
                 cost = abilities[ability].get('cost', {})
                 self.setting['abilities'][ability]['cost'] = {}
                 for pool in cost.keys():
-                    self.setting['abilities'][ability]['cost'][pool] = int(cost[pool])
+                    self.setting['abilities'][ability]['cost'][pool] = int(
+                        cost[pool])
 
             #skills = ['Speed Defense', 'Archery', 'Hacking']
             skills = kw.get('skills', [])
