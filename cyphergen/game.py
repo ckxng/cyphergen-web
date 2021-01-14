@@ -111,8 +111,8 @@ class Game(object):
         Raises:
         Exception('Not Found') if the object is not found
         '''
-        sheet = json.loads(r.get('Game/%s' % id))
-        if sheet:
-            self.sheet = sheet
+        setting = json.loads(r.get('Game/%s' % id))
+        if setting:
+            self.setting = setting
         else:
             raise Exception('Not Found')
