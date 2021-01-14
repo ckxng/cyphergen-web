@@ -107,7 +107,7 @@ class Game(object):
 
                 # add_points
                 self.setting['types'][type]['add_points'] = int(
-                    types.get('add_points', 0))
+                    types[type].get('add_points', 0))
                 
                 # edge
                 edge = types[type].get('edge', {})
@@ -158,10 +158,24 @@ class Game(object):
             #        } # {} if no cost
             #    }
             # }
-            abilities = kw.get('abilities', [])
-            self.setting['abilities'] = []
-            for ability in abilities:
-                self.setting['abilities'].append(str(ability))
+            abilities = kw.get('abilities', {})
+            self.setting['abilities'] = {}
+            for ability in abilities.keys():
+                self.setting['abilities'][ability] = {}
+
+                # description
+                self.setting['abilities'][ability]['description'] = str(abilities[ability].get('description', ''))
+
+                # enabler
+                enabler = int(abilities[ability].get('enabler', 0))
+                if enabler == 0 or enabler == 1:
+                    self.setting['abilities'][ability]['enabler'] = enabler
+                
+                # cost
+                cost = abilities[ability].get('cost', {})
+                self.setting['abilities'][ability]['cost'] = {}
+                for pool in cost.keys():
+                    self.setting['abilities'][ability]['cost'][pool] = int(cost[pool])
 
             #skills = ['Speed Defense', 'Archery', 'Hacking']
             skills = kw.get('skills', [])
