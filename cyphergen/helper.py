@@ -16,7 +16,7 @@ class Helper(object):
 
         self.app = app
 
-    def path(self, path):
+    def apipath(self, path):
         '''Generate a path including the API path (not including base URI)
 
         Parameters:
@@ -28,8 +28,8 @@ class Helper(object):
 
         return self.app.config.get('APIPATH') + path
 
-    def uri(self, path):
-        '''Generate a full URI
+    def apiuri(self, path):
+        '''Generate a full URI for the API
 
         Parameters:
         path(str): the path to append to BASEURI and APIPATH
@@ -39,3 +39,15 @@ class Helper(object):
         '''
 
         return self.app.config.get('BASEURI') + self.app.config.get('APIPATH') + path
+
+    def uri(self, path):
+        '''Generate a full URI
+
+        Parameters:
+        path(str): the path to append to BASEURI
+
+        Returns:
+        str
+        '''
+
+        return self.app.config.get('APIPATH') + path

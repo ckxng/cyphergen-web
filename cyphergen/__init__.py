@@ -7,7 +7,7 @@ characters.
 
 import os
 import logging
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, render_template, redirect
 from . import helper, character, game
 
 app = Flask(__name__)
@@ -19,7 +19,28 @@ app.config.from_mapping(
 app.helper = helper.Helper(app)
 
 
-@app.route(app.helper.path('/games'), methods=['POST'])
+@app.route('/')
+def index():
+    return redirect('/game/', code=301)
+
+@app.route('/game/')
+def html_game():
+    return render_template('game.html')
+
+@app.route('/game/<id>/')
+def html_game_lookup(id):
+    return render_template('game.html')
+
+@app.route('/character/')
+def html_character():
+    return render_template('character.html')
+
+@app.route('/character/<id>/')
+def html_character_lookup(id):
+    return render_template('character.html')
+
+
+@app.route(app.helper.apipath('/games'), methods=['POST'])
 def get_games():
     g = None
     try:
@@ -30,14 +51,14 @@ def get_games():
         return make_response(jsonify({
             'error': 'Failed to save object'
         }), 500)
-    return make_response(app.helper.uri('/games/%s' % g.id), 201)
+    return make_response(app.helper.apiuri('/games/%s' % g.id), 201)
 
 
-@app.route(app.helper.path('/games/<id>'))
+@app.route(app.helper.apipath('/games/<id>'))
 def get_game(id):
     try:
         return jsonify({
-            'id': app.helper.uri('/games/'+id),
+            'id': app.helper.apiuri('/games/'+id),
             'campaign': game.Game(id=id).setting
         })
     except KeyError:
@@ -49,7 +70,7 @@ def get_game(id):
         }), 500)
 
 
-@app.route(app.helper.path('/characters'), methods=['POST'])
+@app.route(app.helper.apipath('/characters'), methods=['POST'])
 def get_characters():
     c = None
     try:
@@ -60,14 +81,14 @@ def get_characters():
         return make_response(jsonify({
             'error': 'Failed to save object'
         }), 500)
-    return make_response(app.helper.uri('/characters/%s' % c.id), 201)
+    return make_response(app.helper.apiuri('/characters/%s' % c.id), 201)
 
 
-@app.route(app.helper.path('/characters/<id>'))
+@app.route(app.helper.apipath('/characters/<id>'))
 def get_character(id):
     try:
         return jsonify({
-            'id': app.helper.uri('/characters/'+id),
+            'id': app.helper.apiuri('/characters/'+id),
             'sheet': character.Character(id=id).sheet
         })
     except KeyError:
