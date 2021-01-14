@@ -39,7 +39,6 @@ class Character(object):
         might(int): Points in might pool
         speed(int): Points in speed pool
         intellect(int): Points in intellect pool
-        armor(int): Armor
         abilities(list): List of ability names
         skills(list): Skills {'name': 0} -1 inability, 0 untrained, 1 trained, 2 specialized
         equipment(list): List of equipment item names
@@ -68,7 +67,6 @@ class Character(object):
             self.sheet['might'] = int(kw.get('might', 0))
             self.sheet['speed'] = int(kw.get('speed', 0))
             self.sheet['intellect'] = int(kw.get('intellect', 0))
-            self.sheet['armor'] = int(kw.get('armor', 0))
             abilities = kw.get('abilities', [])
             self.sheet['abilities'] = []
             for ability in abilities:
