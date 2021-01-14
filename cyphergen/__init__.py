@@ -6,6 +6,7 @@ characters.
 '''
 
 import os
+import logging
 from flask import Flask, jsonify, request, make_response
 from . import helper, character, game
 
@@ -20,37 +21,42 @@ app.helper = helper.Helper(app)
 
 @app.route(app.helper.path('/games'), methods=['POST'])
 def get_games():
-    g = game.Game()
+    g = None
     try:
-        g.sheet = request.get_json(force=True)  # TODO validation
+        g = game.Game(**request.get_json(force=True))
         g.save()
-    except:
+    except Exception as e:
+        app.logger.error(e)
         return make_response(jsonify({
             'error': 'Failed to save object'
         }), 500)
-    return make_response(app.helper.uri('/game/%s' % g.id), 201)
+    return make_response(app.helper.uri('/games/%s' % g.id), 201)
 
 
 @app.route(app.helper.path('/games/<id>'))
 def get_game(id):
     try:
         return jsonify({
-            'game': {
-                'id': app.helper.uri('/games/'+id),
-                'campaign': game.Game(id=id).setting
-            }
+            'id': app.helper.uri('/games/'+id),
+            'campaign': game.Game(id=id).setting
         })
-    except:
+    except KeyError:
         return make_response('', 404)
+    except Exception as e:
+        app.logger.error(e)
+        return make_response(jsonify({
+            'error': 'Failed to lookup object'
+        }), 500)
 
 
 @app.route(app.helper.path('/characters'), methods=['POST'])
 def get_characters():
-    c = character.Character()
+    c = None
     try:
-        c.sheet = request.get_json(force=True)  # TODO validation
+        c = character.Character(**request.get_json(force=True))
         c.save()
-    except:
+    except Exception as e:
+        app.logger.error(e)
         return make_response(jsonify({
             'error': 'Failed to save object'
         }), 500)
@@ -61,13 +67,16 @@ def get_characters():
 def get_character(id):
     try:
         return jsonify({
-            'character': {
-                'id': app.helper.uri('/characters/'+id),
-                'sheet': character.Character(id=id).sheet
-            }
+            'id': app.helper.uri('/characters/'+id),
+            'sheet': character.Character(id=id).sheet
         })
-    except:
+    except KeyError:
         return make_response('', 404)
+    except Exception as e:
+        app.logger.error(e)
+        return make_response(jsonify({
+            'error': 'Failed to lookup object'
+        }), 500)
 
 
 if __name__ == "__main__":

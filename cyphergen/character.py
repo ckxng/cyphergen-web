@@ -55,21 +55,28 @@ class Character(object):
         else:
             self.id = uuid.uuid4()
             self.sheet = {}
-            self.sheet['name'] = kw.get('name', 'Name')
-            self.sheet['type'] = kw.get('type', 'Type')
-            self.sheet['tier'] = kw.get('tier', 1)
-            self.sheet['effort'] = kw.get('effort', 1)
-            self.sheet['edge'] = kw.get('edge', {
-                'might': 0,
-                'speed': 0,
-                'intellect': 0
-            })
-            self.sheet['might'] = kw.get('might', 0)
-            self.sheet['speed'] = kw.get('speed', 0)
-            self.sheet['intellect'] = kw.get('intellect', 0)
-            self.sheet['armor'] = kw.get('armor', 0)
+            self.sheet['name'] = str(kw.get('name', 'Name'))
+            self.sheet['type'] = str(kw.get('type', 'Type'))
+            self.sheet['tier'] = int(kw.get('tier', 1))
+            self.sheet['effort'] = int(kw.get('effort', 1))
+            edge = kw.get('edge', {})
+            self.sheet['edge'] = {}
+            self.sheet['edge']['might'] = int(edge.get('might', 0))
+            self.sheet['edge']['speed'] = int(edge.get('speed', 0))
+            self.sheet['edge']['intellect'] = int(edge.get('intellect', 0))
+            self.sheet['might'] = int(kw.get('might', 0))
+            self.sheet['speed'] = int(kw.get('speed', 0))
+            self.sheet['intellect'] = int(kw.get('intellect', 0))
+            self.sheet['armor'] = int(kw.get('armor', 0))
+            abilities = kw.get('abilities', [])
+            self.sheet['abilities'] = []
+            for ability in abilities:
+                self.sheet['abilities'].append(str(ability))
             self.sheet['abilities'] = kw.get('abilities', [])
-            self.sheet['equipment'] = kw.get('equipment', [])
+            equipment = kw.get('equipment', [])
+            self.sheet['equipment'] = []
+            for item in equipment:
+                self.sheet['equipment'].append(str(item))
 
     def save(self):
         '''

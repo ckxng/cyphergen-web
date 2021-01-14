@@ -47,7 +47,7 @@ class Game(object):
         else:
             self.id = uuid.uuid4()
             self.setting = {}
-            self.setting['name'] = kw.get('name', 'Name')
+            self.setting['name'] = str(kw.get('name', 'Name'))
 
             # types = {
             #    'Name': {
@@ -79,7 +79,75 @@ class Game(object):
             #        'add_abilities': 3 #additional abilities
             #    }
             # }
-            self.setting['types'] = kw.get('types', {})
+            types = kw.get('types', {})
+            self.setting['types'] = {}
+            for type in types.keys():
+                self.setting['types'][type] = {}
+
+                # pools
+                self.setting['types'][type]['pools'] = {}
+                pools = types[type].get('pools', {})
+                self.setting['types'][type]['pools'] = {}
+                self.setting['types'][type]['pools']['might'] = str(
+                    pools.get('might', 'Might'))
+                self.setting['types'][type]['pools']['speed'] = str(
+                    pools.get('speed', 'Speed'))
+                self.setting['types'][type]['pools']['intellect'] = str(
+                    pools.get('intellect', 'Intellect'))
+
+                # base_points
+                base_points = types[type].get('base_points', {})
+                self.setting['types'][type]['base_points'] = {}
+                self.setting['types'][type]['base_points']['might'] = int(
+                    base_points.get('might', 0))
+                self.setting['types'][type]['base_points']['speed'] = int(
+                    base_points.get('speed', 0))
+                self.setting['types'][type]['base_points']['intellect'] = int(
+                    base_points.get('intellect', 0))
+
+                # add_points
+                self.setting['types'][type]['add_points'] = int(
+                    types.get('add_points', 0))
+                
+                # edge
+                edge = types[type].get('edge', {})
+                self.setting['types'][type]['edge'] = {}
+                self.setting['types'][type]['edge']['might'] = int(
+                    edge.get('might', 0))
+                self.setting['types'][type]['edge']['speed'] = int(
+                    edge.get('speed', 0))
+                self.setting['types'][type]['edge']['intellect'] = int(
+                    edge.get('intellect', 0))
+                
+                # add_edge
+                self.setting['types'][type]['add_edge'] = int(
+                    types[type].get('add_edge', 0))
+                
+                # base_skills
+                base_skills = types[type].get('base_skills', [])
+                self.setting['types'][type]['base_skills'] = []
+                for skill in base_skills:
+                    self.setting['types'][type]['base_skills'].append(
+                        str(skill))
+
+                # add_skills
+                self.setting['types'][type]['add_skills'] = int(
+                    types[type].get('add_skills', 0))
+                
+                # cyphers
+                self.setting['types'][type]['cyphers'] = int(
+                    types[type].get('cyphers', 0))
+                
+                # base_abilities
+                base_abilities = types[type].get('base_abilities', [])
+                self.setting['types'][type]['base_abilities'] = []
+                for ability in base_abilities:
+                    self.setting['types'][type]['base_abilities'].append(
+                        str(ability))
+                
+                # add_abilities
+                self.setting['types'][type]['add_abilities'] = int(
+                    types[type].get('add_abilities', 0))
 
             # abilities = {
             #    'Name': {
@@ -90,16 +158,22 @@ class Game(object):
             #        } # {} if no cost
             #    }
             # }
-            self.setting['abilities'] = kw.get('abilities', {})
+            abilities = kw.get('abilities', [])
+            self.setting['abilities'] = []
+            for ability in abilities:
+                self.setting['abilities'].append(str(ability))
 
             #skills = ['Speed Defense', 'Archery', 'Hacking']
-            self.setting['skills'] = kw.get('skills', [])
+            skills = kw.get('skills', [])
+            self.setting['skills'] = []
+            for skill in skills:
+                self.setting['skills'].append(str(skill))
 
     def save(self):
         '''
         Save the object
         '''
-        r.set('Game/%s' % self.id, json.dumps(self.sheet))
+        r.set('Game/%s' % self.id, json.dumps(self.setting))
 
     def load(self, id):
         '''
@@ -109,10 +183,10 @@ class Game(object):
         id(str): UUID
 
         Raises:
-        Exception('Not Found') if the object is not found
+        KeyError if the object is not found
         '''
         setting = json.loads(r.get('Game/%s' % id))
         if setting:
             self.setting = setting
         else:
-            raise Exception('Not Found')
+            raise KeyError()
