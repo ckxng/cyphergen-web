@@ -41,6 +41,7 @@ class Character(object):
         intellect(int): Points in intellect pool
         armor(int): Armor
         abilities(list): List of ability names
+        skills(list): Skills {'name': 0} -1 inability, 0 untrained, 1 trained, 2 specialized
         equipment(list): List of equipment item names
 
         Raises:
@@ -72,6 +73,10 @@ class Character(object):
             self.sheet['abilities'] = []
             for ability in abilities:
                 self.sheet['abilities'].append(str(ability))
+            skills = kw.get('skills', {})
+            self.sheet['skills'] = {}
+            for skill in skills.keys():
+                self.sheet['skills'][skill] = int(skills[skill])
             self.sheet['abilities'] = kw.get('abilities', [])
             equipment = kw.get('equipment', [])
             self.sheet['equipment'] = []
