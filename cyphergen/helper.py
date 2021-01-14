@@ -1,5 +1,6 @@
 '''A collection of helper functions'''
 
+
 class Helper(object):
     '''A collection of helper functions'''
 
@@ -12,7 +13,7 @@ class Helper(object):
         Returns:
         Helper
         '''
-        
+
         self.app = app
 
     def path(self, path):

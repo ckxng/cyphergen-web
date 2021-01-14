@@ -11,19 +11,20 @@ from . import helper, character, game
 
 app = Flask(__name__)
 app.config.from_mapping(
-    DBCONN = os.environ.get('DBCONN'),
-    BASEURI = os.environ.get('BASEURI', ''),
-    APIPATH = os.environ.get('APIPATH', '/api/v1')
+    DBCONN=os.environ.get('DBCONN'),
+    BASEURI=os.environ.get('BASEURI', ''),
+    APIPATH=os.environ.get('APIPATH', '/api/v1')
 )
 app.helper = helper.Helper(app)
 
-@app.route(app.helper.path('/games', methods = ['POST', 'GET']))
+
+@app.route(app.helper.path('/games', methods=['POST', 'GET']))
 def get_games():
     if request.method == 'POST':
         g = game.Game()
-        g.sheet = request.get_json(force=True) #TODO validation
+        g.sheet = request.get_json(force=True)  # TODO validation
         g.save()
-    
+
     elif request.method == 'GET':
         return jsonify({
             'games': [
@@ -33,20 +34,22 @@ def get_games():
             ]
         })
 
+
 @app.route(app.helper.path('/games/<id>'))
 def get_game(id):
     return jsonify({
         'game': {
             'id': app.helper.uri('/games/'+id),
-            'campaign' : game.Game().setting
+            'campaign': game.Game().setting
         }
     })
 
-@app.route(app.helper.path('/characters', methods = ['POST', 'GET']))
+
+@app.route(app.helper.path('/characters', methods=['POST', 'GET']))
 def get_characters():
     if request.method == 'POST':
         c = character.Character()
-        c.sheet = request.get_json(force=True) #TODO validation
+        c.sheet = request.get_json(force=True)  # TODO validation
         c.save()
 
     elif request.method == 'GET':
@@ -58,6 +61,7 @@ def get_characters():
             ]
         })
 
+
 @app.route(app.helper.path('/characters/<id>'))
 def get_character(id):
     return jsonify({
@@ -66,6 +70,7 @@ def get_character(id):
             'sheet': character.Character().sheet
         }
     })
+
 
 if __name__ == "__main__":
     app.run()

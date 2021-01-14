@@ -11,6 +11,7 @@ import uuid
 
 r = redis.from_url(os.environ.get('REDIS_URL'))
 
+
 class Game(object):
     '''A game setting in the Cypher System
 
@@ -24,7 +25,7 @@ class Game(object):
         If id is specified, attempt to load the object stored with that id.
         If the load was sucessful, the object is populated with the stored
         data.  If the load was unsucessful, Exception('Not Found') is raised.
-        
+
         If id is not specified, populate the object with the following 
         parameters or a default if not specified.
 
@@ -48,7 +49,7 @@ class Game(object):
             self.setting = {}
             self.setting['name'] = kw.get('name', 'Name')
 
-            #types = {
+            # types = {
             #    'Name': {
             #        'pools': { #remap names for pools
             #            'might': 'Might',
@@ -77,10 +78,10 @@ class Game(object):
             #        ],
             #        'add_abilities': 3 #additional abilities
             #    }
-            #}
+            # }
             self.setting['types'] = kw.get('types', {})
 
-            #abilities = {
+            # abilities = {
             #    'Name': {
             #        'description': "...",
             #        'enabler': 0, #1 if enabler, else 0
@@ -88,7 +89,7 @@ class Game(object):
             #            'might': 1
             #        } # {} if no cost
             #    }
-            #}
+            # }
             self.setting['abilities'] = kw.get('abilities', {})
 
             #skills = ['Speed Defense', 'Archery', 'Hacking']
@@ -98,8 +99,8 @@ class Game(object):
         '''
         Save the object
         '''
-        r.set('Game/%s'%self.id, json.dumps(self.sheet))
-    
+        r.set('Game/%s' % self.id, json.dumps(self.sheet))
+
     def load(self, id):
         '''
         Load the object with id
@@ -110,7 +111,7 @@ class Game(object):
         Raises:
         Exception('Not Found') if the object is not found
         '''
-        sheet = json.loads(r.get('Game/%s'%id))
+        sheet = json.loads(r.get('Game/%s' % id))
         if sheet:
             self.sheet = sheet
         else:

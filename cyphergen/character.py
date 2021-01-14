@@ -11,6 +11,7 @@ import uuid
 
 r = redis.from_url(os.environ.get('REDIS_URL'))
 
+
 class Character(object):
     '''A character in the Cypher System
 
@@ -24,7 +25,7 @@ class Character(object):
         If id is specified, attempt to load the object stored with that id.
         If the load was sucessful, the object is populated with the stored
         data.  If the load was unsucessful, Exception('Not Found') is raised.
-        
+
         If id is not specified, populate the object with the following 
         parameters or a default if not specified.
 
@@ -48,7 +49,7 @@ class Character(object):
         Returns:
         Character
         '''
-        
+
         if 'id' in kw:
             self.load(kw['id'])
         else:
@@ -69,13 +70,13 @@ class Character(object):
             self.sheet['armor'] = kw.get('armor', 0)
             self.sheet['abilities'] = kw.get('abilities', [])
             self.sheet['equipment'] = kw.get('equipment', [])
-    
+
     def save(self):
         '''
         Save the object
         '''
-        r.set('Character/%s'%self.id, json.dumps(self.sheet))
-    
+        r.set('Character/%s' % self.id, json.dumps(self.sheet))
+
     def load(self, id):
         '''
         Load the object with id
@@ -86,7 +87,7 @@ class Character(object):
         Raises:
         Exception('Not Found') if the object is not found
         '''
-        sheet = json.loads(r.get('Character/%s'%id))
+        sheet = json.loads(r.get('Character/%s' % id))
         if sheet:
             self.sheet = sheet
         else:
