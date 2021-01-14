@@ -29,6 +29,22 @@ Base URI of the application
 
 Path at which to publish the API endpoint
 
-    DBCONN=mongodb://abc@xyz:123/foo
+    REDIS_URL=
 
-Database connection string to a MongoDB
+Connection strong for Redis (only specify if not already provided by
+the deployment platform, as with the Heroku directions below.)
+
+## Deploy on Heroku
+
+    heroku create
+    heroku addons:create heroku-redis:hobby-dev
+    git push heroku main
+
+Note that this will provide REDIS_URL for you.  You do not need to specify
+REDIS_URL in `.env`.  Note that the hobby-dev tier does not provide 
+persistence.  Data will be wiped every time the app reloads.
+
+Note that redis is not the ideal backend database for a service such as 
+this one, however since this is a hobby project, scalability is not as
+large a concern as accessibility.  The Character and Game classes must 
+be adjusted to change to a more appropriate backend, such as MongoDB.

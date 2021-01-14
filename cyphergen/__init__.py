@@ -17,15 +17,21 @@ app.config.from_mapping(
 )
 app.helper = helper.Helper(app)
 
-@app.route(app.helper.path('/games'))
+@app.route(app.helper.path('/games', methods = ['POST', 'GET']))
 def get_games():
-    return jsonify({
-        'games': [
-            app.helper.uri("/games/1"),
-            app.helper.uri("/games/2"),
-            app.helper.uri("/games/3")
-        ]
-    })
+    if request.method == 'POST':
+        g = game.Game()
+        g.sheet = request.get_json(force=True) #TODO validation
+        g.save()
+    
+    elif request.method == 'GET':
+        return jsonify({
+            'games': [
+                app.helper.uri("/games/1"),
+                app.helper.uri("/games/2"),
+                app.helper.uri("/games/3")
+            ]
+        })
 
 @app.route(app.helper.path('/games/<id>'))
 def get_game(id):
@@ -36,15 +42,21 @@ def get_game(id):
         }
     })
 
-@app.route(app.helper.path('/characters'))
+@app.route(app.helper.path('/characters', methods = ['POST', 'GET']))
 def get_characters():
-    return jsonify({
-        'games': [
-            app.helper.uri("/character/1"),
-            app.helper.uri("/character/2"),
-            app.helper.uri("/character/3")
-        ]
-    })
+    if request.method == 'POST':
+        c = character.Character()
+        c.sheet = request.get_json(force=True) #TODO validation
+        c.save()
+
+    elif request.method == 'GET':
+        return jsonify({
+            'characters': [
+                app.helper.uri("/character/1"),
+                app.helper.uri("/character/2"),
+                app.helper.uri("/character/3")
+            ]
+        })
 
 @app.route(app.helper.path('/characters/<id>'))
 def get_character(id):
