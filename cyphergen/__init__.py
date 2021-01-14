@@ -18,7 +18,7 @@ app.config.from_mapping(
 app.helper = helper.Helper(app)
 
 
-@app.route(app.helper.path('/games', methods=['POST', 'GET']))
+@app.route(app.helper.path('/games'), methods=['POST', 'GET'])
 def get_games():
     if request.method == 'POST':
         g = game.Game()
@@ -45,7 +45,7 @@ def get_game(id):
     })
 
 
-@app.route(app.helper.path('/characters', methods=['POST', 'GET']))
+@app.route(app.helper.path('/characters'), methods=['POST', 'GET'])
 def get_characters():
     if request.method == 'POST':
         c = character.Character()
