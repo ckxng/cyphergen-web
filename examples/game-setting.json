@@ -1,0 +1,85 @@
+{
+  "name": "A strange campaign",
+  "pools": {
+    "intellect": "Intellect",
+    "might": "Might",
+    "speed": "Speed"
+  },
+  "abilities": {
+    "Run Away": {
+      "cost": { "speed": 1 },
+      "description": "Run like brave Sir Robin",
+      "enabler": 0
+    },
+    "Slap": {
+      "cost": { "might": 2 },
+      "description": "Smack someone in melee range for 6pts of damage",
+      "enabler": 0
+    },
+    "True Sight": {
+      "cost": {},
+      "description": "See things for what they really are, even if they are disguised or invisible",
+      "enabler": 1
+    }
+  },
+  "types": {
+    "Fighter": {
+      "add_abilities": 1,
+      "add_edge": 0,
+      "add_points": 6,
+      "add_skills": 1,
+      "base_abilities": ["Slap"],
+      "base_points": {
+        "intellect": 6,
+        "might": 10,
+        "speed": 8
+      },
+      "base_skills": ["Fight"],
+      "cyphers": 1,
+      "edge": {
+        "intellect": 0,
+        "might": 1,
+        "speed": 0
+      }
+    },
+    "Runner": {
+      "add_abilities": 1,
+      "add_edge": 0,
+      "add_points": 6,
+      "add_skills": 2,
+      "base_abilities": ["Run Away"],
+      "base_points": {
+        "intellect": 6,
+        "might": 8,
+        "speed": 10
+      },
+      "base_skills": [],
+      "cyphers": 1,
+      "edge": {
+        "intellect": 0,
+        "might": 0,
+        "speed": 1
+      }
+    },
+    "Jack": {
+      "add_abilities": 2,
+      "add_edge": 1,
+      "add_points": 2,
+      "add_skills": 2,
+      "base_abilities": [],
+      "base_points": {
+        "intellect": 10,
+        "might": 10,
+        "speed": 10
+      },
+      "base_skills": [],
+      "cyphers": 1,
+      "edge": {
+        "intellect": 0,
+        "might": 0,
+        "speed": 0
+      }
+    }
+  },
+  "skills": ["Eat", "Sleep", "Fight"]
+}
