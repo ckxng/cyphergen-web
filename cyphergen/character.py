@@ -44,7 +44,7 @@ class Character(object):
         equipment(list): List of equipment item names
 
         Raises:
-        Exception('Not Found') if id is specified and the object is not found
+        KeyError if id is specified and the object is not found
 
         Returns:
         Character
@@ -95,10 +95,10 @@ class Character(object):
         id(str): UUID
 
         Raises:
-        Exception('Not Found') if the object is not found
+        KeyError if the object is not found
         '''
         sheet = json.loads(r.get('Character/%s' % id))
         if sheet:
             self.sheet = sheet
         else:
-            raise Exception('Not Found')
+            raise KeyError()

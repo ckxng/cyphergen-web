@@ -38,7 +38,7 @@ class Game(object):
         skills(list): List of the skills available in the setting
 
         Raises:
-        Exception('Not Found') if id is specified and the object is not found
+        KeyError if id is specified and the object is not found
 
         Use optional keyword parameters to set values in self.sheet.
         '''
