@@ -6,7 +6,9 @@ Present a website and API which allows GMs for the Cypher System RPG
 to create settings, that players can then use to create Level 1
 characters.
 
-## Development
+## Local Development
+
+### Configure Python
 
 Run the following commands to setup your Python environment.
 
@@ -14,7 +16,7 @@ Run the following commands to setup your Python environment.
     pip install -r requirements.txt
     cp default.env .env
 
-## Environment File
+### Environment File
 
 Set environment variables in `.env`
 
@@ -32,10 +34,13 @@ Base URI of the application
 
 Path at which to publish the API endpoint
 
-    REDIS_URL=
+    REDIS_URL=redis://:password@hostname:6379
 
-Connection strong for Redis (only specify if not already provided by
-the deployment platform, as with the Heroku directions below.)
+Connection string for Redis.
+
+### Start the Server
+
+     flask run
 
 ## Deploy on Heroku
 
@@ -44,8 +49,9 @@ the deployment platform, as with the Heroku directions below.)
     git push heroku main
 
 Note that this will provide REDIS_URL for you. You do not need to specify
-REDIS_URL in `.env`. Note that the hobby-dev tier does not provide
-persistence. Data will be wiped every time the app reloads.
+anything in `.env` as the defaults provided by Heroku will be adequate. Note 
+that the hobby-dev tier does not provide persistence. Data will be wiped every
+time the app reloads.
 
 Note that redis is not the ideal backend database for a service such as
 this one, however since this is a hobby project, scalability is not as
