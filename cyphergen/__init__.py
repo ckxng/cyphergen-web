@@ -111,8 +111,8 @@ def post_characters():
         }), 500)
     return make_response(jsonify({
         'id': c.id,
-        'api': app.helper.apiuri("/characters/%s" % c.id),
-        'web': app.helper.uri("/character/%s" % c.id)
+        'api': app.helper.apiuri("/characters/%s" % c.id)#,
+        #'web': app.helper.uri("/character/%s" % c.id)
     }), 201)
 
 
@@ -122,7 +122,7 @@ def get_character(id):
         return jsonify({
             'id': id,
             'api': app.helper.apiuri('/characters/'+id),
-            'web': app.helper.uri('/character/'+id),
+            #'web': app.helper.uri('/character/'+id),
             'sheet': character.Character(id=id).sheet
         })
     except KeyError:

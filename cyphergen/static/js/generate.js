@@ -43,10 +43,9 @@ $('#sheet-form').submit(function( event ) {
             console.log(JSON.stringify(data));
             if(jqXHR.status == 201) {
                 $('#form-success').html(
-                    'Your character can be viewed at this URL:<br>'+
-                    `<a href="${data.web}">${data.web}</a><br>`+
-                    'Your submitted character parameters can be viewed '+
-                    `<a href="${data.api}">here</a>.`);
+                    'Your character parameters can be viewed at this URL:<br>'+
+                    `<a href="${data.api}">${data.api}</a><br>`+
+                    'Print that page (or save the URL) and bring it with you to session zero for character creation.');
                 $('#form-success').show();
             } else {
                 $('#form-warning').html("The server failed to process the request.  Check to make sure your input matches the template." );
