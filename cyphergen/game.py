@@ -125,11 +125,11 @@ class Game(object):
                     types[type].get('add_edge', 0))
 
                 # base_skills
-                base_skills = types[type].get('base_skills', [])
-                self.setting['types'][type]['base_skills'] = []
-                for skill in base_skills:
-                    self.setting['types'][type]['base_skills'].append(
-                        str(skill))
+                base_skills = types[type].get('base_skills', {})
+                self.setting['types'][type]['base_skills'] = {}
+                for skill in base_skills.keys():
+                    if int(base_skills[skill]) == 0 or int(base_skills[skill]) == 1 or int(base_skills[skill]) == 2:
+                        self.setting['types'][type]['base_skills'][skill] = int(base_skills[skill])
 
                 # add_skills
                 self.setting['types'][type]['add_skills'] = int(
@@ -205,7 +205,7 @@ class Game(object):
         needle = r.get('Game/%s' % id)
         if not needle:
             raise KeyError()
-        
+
         setting = json.loads(r.get('Game/%s' % id))
         if setting:
             self.setting = setting

@@ -31,8 +31,185 @@
         <h1>Create a Character Sheet</h1>
         <p>
           Use this form to create a character sheet from an existing game
-          setting.
+          setting.  The name of this game setting is "<strong>{{setting.name}}</strong>".
         </p>
+
+        <form id="sheet-form">
+          <fieldset class="row mb-3">
+            <h2>Basic Info</h2>
+            <label for="name" class="col-sm-1 col-form-label" style="text-align: right;">Name</label>
+            <input type="text" class="col-sm-7 col-form-control" id="name">
+            <label for="tier" class="col-sm-1 col-form-label" style="text-align: right;">Tier</label>
+            <input type="text" class="col-sm-1 col-form-control" id="tier" value="1" disabled>
+            <label for="effort" class="col-sm-1 col-form-label" style="text-align: right;">Effort</label>
+            <input type="text" class="col-sm-1 col-form-control" id="effort" value="1" disabled>
+          </fieldset>
+
+          <!-- type -->
+          <h2>Type</h2>
+          <fieldset class="row mb-3">
+            <legend class="col-form-label col-sm-1 pt-0">Type</legend>
+            <div class="col-sm-11">
+              {% for type in setting.types %}
+                <div class="form-check">
+                  <input class="type" type="radio" name="type" id="type-{{type}}" value="{{ type }}" style="vertical-align: top; margin-top: .5em">
+                  <label class="form-check-label" for="type-{{type}}">
+                    <strong>{{type}}</strong><br />
+                    Pools: {{setting.types[type].base_points.might}} {{setting.pools.might}} /
+                    {{setting.types[type].base_points.speed}} {{setting.pools.speed}} /
+                    {{setting.types[type].base_points.intellect}} {{setting.pools.intellect}} / 
+                    +{{setting.types[type].add_points}} additional pts<br />
+
+                    Edge: {{setting.types[type].edge.might}} {{setting.pools.might}} /
+                    {{setting.types[type].edge.speed}} {{setting.pools.speed}} /
+                    {{setting.types[type].edge.intellect}} {{setting.pools.intellect}} / 
+                    +{{setting.types[type].add_edge}} additional edge<br />
+
+                    {% set skill_list = [] -%}
+                    {% for skill in setting.types[type].base_skills -%}
+                      {% if setting.types[type].base_skills[skill] < 0 -%}
+                        {{ skill_list.append(skill + " (Inability)")|default("", True) }}
+                      {% elif setting.types[type].base_skills[skill] == 1 -%}
+                        {{ skill_list.append(skill + " (Trained)")|default("", True) }}
+                      {% elif setting.types[type].base_skills[skill] == 2 -%}
+                        {{ skill_list.append(skill + " (Specialized)")|default("", True) }}
+                      {% endif -%}
+                    {% endfor -%}
+                    Skills: [{{skill_list | join(', ')}}] 
+                    +{{setting.types[type].add_skills}} additional skills<br />
+
+                    Abilities: [{{setting.types[type].base_abilities | join(', ')}}] 
+                    +{{setting.types[type].add_abilities}} additional abilities<br />
+
+                    Holds {{setting.types[type].cyphers}} cypher at a time
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          </fieldset>
+
+          <!-- pools -->
+          <fieldset class="row mb-3">
+            <h2>Pools</h2>
+            <p>
+              Review the above information for your selected type.  
+              Start by entering the number of points indicated in the "Pools" section of your 
+              type description.  Next, if you have "additional points" available, allocate
+              those among your pools however you see fit.
+            </p>
+            <label for="might" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.might}}</label>
+            <input type="text" class="col-sm-2 col-form-control" id="might">
+            <label for="speed" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.speed}}</label>
+            <input type="text" class="col-sm-2 col-form-control" id="speed">
+            <label for="intellect" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.intellect}}</label>
+            <input type="text" class="col-sm-2 col-form-control" id="intellect">
+          </fieldset>
+
+          <!-- edge -->
+          <fieldset class="row mb-3">
+            <h2>Edge</h2>
+            <p>
+              Review the above information for your selected type.  
+              Start by entering the number of points indicated in the "Edge" section of your 
+              type description.  Next, if you have "additional edge" available, allocate
+              those among your pools however you see fit.
+            </p>
+            <label for="edge.might" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.might}}</label>
+            <input type="text" class="col-sm-2 col-form-control" id="edge.might">
+            <label for="edge.speed" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.speed}}</label>
+            <input type="text" class="col-sm-2 col-form-control" id="edge.speed">
+            <label for="edge.intellect" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.intellect}}</label>
+            <input type="text" class="col-sm-2 col-form-control" id="edge.intellect">
+          </fieldset>
+
+          <!-- skills -->
+          <h2>Skills</h2>
+          <p>
+            Review the above information for your selected type.  
+            Start by selecting your training level in any skills listed in the "Skills" 
+            section of your type description.  Next, if you have any "additional skills", you
+            may use each additional skill point to move up the track one level in the skill 
+            of your choice for each point.
+          </p>
+          <input type="hidden" name="skill_list" value="{{setting.skills|join("|")}}" />
+          {% for skill in setting.skills -%}
+            <div class="form-check">
+              <fieldset class="row mb-3">
+                <div class="col-2">
+                  <legend class="col-form-label col-sm-2 pt-0">{{skill}}</legend>
+                </div>
+                <div class="col-2">
+                  <input class="form-check-input" type="radio" name="skill-{{skill}}" id="skill-{{skill}}--1" value="-1">
+                  <label class="form-check-label" for="skill-{{skill}}--1">Inability</label>
+                </div>
+                <div class="col-2">
+                  <input class="form-check-input" type="radio" name="skill-{{skill}}" id="skill-{{skill}}-0" value="0" checked>
+                  <label class="form-check-label" for="skill-{{skill}}-0">Untrained (Default)</label>
+                </div>
+                <div class="col-2">
+                  <input class="form-check-input" type="radio" name="skill-{{skill}}" id="skill-{{skill}}-1" value="1">
+                  <label class="form-check-label" for="skill-{{skill}}-1">Trained</label>
+                </div>
+                <div class="col-2">
+                  <input class="form-check-input" type="radio" name="skill-{{skill}}" id="skill-{{skill}}-2" value="2">
+                  <label class="form-check-label" for="skill-{{skill}}-2">Specialized</label>
+                </div>
+              </fieldset>
+            </div>
+          {% endfor -%}
+
+          <!-- abilities -->
+          <h2>Abilities</h2>
+          <p>
+            Review the above information for your selected type.  
+            Start by selecting any abilities listed in the "Skills" 
+            section of your type description.  Next, if you have any "additional abilities", you
+            may use each additional ability point to select additional abilities from this list.
+          </p>
+          <fieldset class="row mb-3">
+            <legend class="col-form-label col-sm-1 pt-0">Abilities</legend>
+            <div class="col-sm-11">
+              {% for ability in setting.abilities %}
+                <div class="form-check">
+                  <input class="type" type="checkbox" name="abilities" id="abilities-{{ability}}" value="{{ ability }}" style="vertical-align: top; margin-top: .5em">
+                  <label class="form-check-label" for="abilities-{{ability}}">
+                    <strong>{{ability}}</strong> 
+                    {% set cost = [] -%}
+                    {% for pool in setting.abilities[ability].cost -%}
+                      {{ cost.append(setting.pools[pool]+" "+setting.abilities[ability].cost[pool]|string)|default("", True) }}
+                    {% endfor -%}
+                    {% if cost|length > 0 -%}
+                      (Cost: {{ cost|join(", ")}})
+                    {% endif %}
+                    {% if setting.abilities[ability].enabler -%}
+                      (enabler)
+                    {% endif %}<br />
+                    {{setting.abilities[ability].description}}
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          </fieldset>
+
+          <!-- equipment -->
+          <h2>Equipment</h2>
+          <p>
+            Add whatever equipment your character will start with.  Type in equipment one line per item.
+          </p>
+          <fieldset class="row mb-3">
+            <div class="col-sm-12">
+              <textarea
+                class="form-control"
+                id="equipment"
+                style="height: 100px"
+              ></textarea>
+            </div>
+          </fieldset>
+
+          <div id="form-warning" class="alert alert-warning" role="alert" style="display:none"></div>
+          <div id="form-success" class="alert alert-success" role="alert" style="display:none"></div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
       </div>
     </main>
 
