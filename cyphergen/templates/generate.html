@@ -98,11 +98,11 @@
               those among your pools however you see fit.
             </p>
             <label for="might" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.might}}</label>
-            <input type="text" class="col-sm-2 col-form-control" id="might">
+            <input type="text" class="col-sm-2 col-form-control" name="might" id="might">
             <label for="speed" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.speed}}</label>
-            <input type="text" class="col-sm-2 col-form-control" id="speed">
+            <input type="text" class="col-sm-2 col-form-control" name="speed" id="speed">
             <label for="intellect" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.intellect}}</label>
-            <input type="text" class="col-sm-2 col-form-control" id="intellect">
+            <input type="text" class="col-sm-2 col-form-control" name="intellect" id="intellect">
           </fieldset>
 
           <!-- edge -->
@@ -114,12 +114,12 @@
               type description.  Next, if you have "additional edge" available, allocate
               those among your pools however you see fit.
             </p>
-            <label for="edge.might" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.might}}</label>
-            <input type="text" class="col-sm-2 col-form-control" id="edge.might">
-            <label for="edge.speed" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.speed}}</label>
-            <input type="text" class="col-sm-2 col-form-control" id="edge.speed">
-            <label for="edge.intellect" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.intellect}}</label>
-            <input type="text" class="col-sm-2 col-form-control" id="edge.intellect">
+            <label for="edgemight" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.might}}</label>
+            <input type="text" class="col-sm-2 col-form-control" name="edgemight" id="edgemight">
+            <label for="edgespeed" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.speed}}</label>
+            <input type="text" class="col-sm-2 col-form-control" name="edgespeed" id="edgespeed">
+            <label for="edgeintellect" class="col-sm-2 col-form-label" style="text-align: right;">{{setting.pools.intellect}}</label>
+            <input type="text" class="col-sm-2 col-form-control" name="edgeintellect" id="edgeintellect">
           </fieldset>
 
           <!-- skills -->
@@ -131,7 +131,7 @@
             may use each additional skill point to move up the track one level in the skill 
             of your choice for each point.
           </p>
-          <input type="hidden" name="skill_list" value="{{setting.skills|join("|")}}" />
+          <input type="hidden" id="skill-list" name="skill-list" value="{{setting.skills|join("\n")}}" />
           {% for skill in setting.skills -%}
             <div class="form-check">
               <fieldset class="row mb-3">
@@ -171,7 +171,7 @@
             <div class="col-sm-11">
               {% for ability in setting.abilities %}
                 <div class="form-check">
-                  <input class="type" type="checkbox" name="abilities" id="abilities-{{ability}}" value="{{ ability }}" style="vertical-align: top; margin-top: .5em">
+                  <input class="type abilities-checkbox" type="checkbox" name="abilities[]" id="abilities-{{ability}}" value="{{ ability }}" style="vertical-align: top; margin-top: .5em">
                   <label class="form-check-label" for="abilities-{{ability}}">
                     <strong>{{ability}}</strong> 
                     {% set cost = [] -%}
