@@ -97,7 +97,11 @@ class Character(object):
         Raises:
         KeyError if the object is not found
         '''
-        sheet = json.loads(r.get('Character/%s' % id))
+        needle = r.get('Character/%s' % id)
+        if not needle:
+            raise KeyError()
+
+        sheet = json.loads(needle)
         if sheet:
             self.sheet = sheet
         else:

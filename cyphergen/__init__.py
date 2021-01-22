@@ -26,12 +26,24 @@ def html_index():
 
 @app.route('/generate/<id>/')
 def html_generate(id):
-    return render_template('generate.html')
+    try:
+        return render_template('generate.html', setting=game.Game(id=id).setting)
+    except KeyError:
+        return make_response(render_template('404.html'), 404)
+    except Exception as e:
+        app.logger.error(e)
+        return make_response(render_template('500.html'), 500)
 
 
 @app.route('/character/<id>/')
 def html_character_lookup(id):
-    return render_template('character.html')
+    try:
+        return render_template('character.html', sheet=character.Character(id=id).sheet)
+    except KeyError:
+        return make_response(render_template('404.html'), 404)
+    except Exception as e:
+        app.logger.error(e)
+        return make_response(render_template('500.html'), 500)
 
 
 @app.route(app.helper.apipath('/games'), methods=['POST'])

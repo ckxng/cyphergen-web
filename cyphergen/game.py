@@ -202,6 +202,10 @@ class Game(object):
         Raises:
         KeyError if the object is not found
         '''
+        needle = r.get('Game/%s' % id)
+        if not needle:
+            raise KeyError()
+        
         setting = json.loads(r.get('Game/%s' % id))
         if setting:
             self.setting = setting
