@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config.from_mapping(
     DBCONN=os.environ.get('DBCONN'),
     BASEURI=os.environ.get('BASEURI', ''),
-    APIPATH=os.environ.get('APIPATH', '/api/v1')
+    APIPATH='/api/v1'
 )
 app.helper = helper.Helper(app)
 
@@ -23,9 +23,11 @@ app.helper = helper.Helper(app)
 def html_index():
     return render_template('index.html')
 
+
 @app.route('/generate/<id>/')
 def html_generate(id):
     return render_template('generate.html')
+
 
 @app.route('/character/<id>/')
 def html_character_lookup(id):
@@ -33,24 +35,38 @@ def html_character_lookup(id):
 
 
 @app.route(app.helper.apipath('/games'), methods=['POST'])
-def get_games():
+def post_games():
+    '''create a new game setting
+
+    data:
+    JSON(str)  a character to pass to Character()
+
+    required headers:
+    Content-Type: application/json
+    '''
     g = None
     try:
-        g = game.Game(**request.get_json(force=True))
+        g = game.Game(**request.get_json())
         g.save()
     except Exception as e:
         app.logger.error(e)
         return make_response(jsonify({
             'error': 'Failed to save object'
         }), 500)
-    return make_response(app.helper.apiuri('/games/%s' % g.id), 201)
+    return make_response(jsonify({
+        'id': g.id,
+        'api': app.helper.apiuri("/games/%s" % g.id),
+        'web': app.helper.uri("/generate/%s" % g.id)
+    }), 201)
 
 
 @app.route(app.helper.apipath('/games/<id>'))
 def get_game(id):
     try:
         return jsonify({
-            'id': app.helper.apiuri('/games/'+id),
+            'id': id,
+            'api': app.helper.apiuri('/games/'+id),
+            'web': app.helper.uri('/generate/'+id),
             'campaign': game.Game(id=id).setting
         })
     except KeyError:
@@ -63,24 +79,38 @@ def get_game(id):
 
 
 @app.route(app.helper.apipath('/characters'), methods=['POST'])
-def get_characters():
+def post_characters():
+    '''create a new character
+
+    data:
+    JSON(str)  a character to pass to Character()
+
+    required headers:
+    Content-Type: application/json
+    '''
     c = None
     try:
-        c = character.Character(**request.get_json(force=True))
+        c = character.Character(**request.get_json())
         c.save()
     except Exception as e:
         app.logger.error(e)
         return make_response(jsonify({
             'error': 'Failed to save object'
         }), 500)
-    return make_response(app.helper.apiuri('/characters/%s' % c.id), 201)
+    return make_response(jsonify({
+        'id': c.id,
+        'api': app.helper.apiuri("/characters/%s" % c.id),
+        'web': app.helper.uri("/character/%s" % c.id)
+    }), 201)
 
 
 @app.route(app.helper.apipath('/characters/<id>'))
 def get_character(id):
     try:
         return jsonify({
-            'id': app.helper.apiuri('/characters/'+id),
+            'id': id,
+            'api': app.helper.apiuri('/characters/'+id),
+            'web': app.helper.uri('/character/'+id),
             'sheet': character.Character(id=id).sheet
         })
     except KeyError:

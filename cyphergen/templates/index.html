@@ -10,6 +10,11 @@
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
     />
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
+      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+      crossorigin="anonymous"
+    ></script>
     <script nomodule>
       window.MSInputMethodContext &&
         document.documentMode &&
@@ -34,12 +39,12 @@
           displayed to help you get going.
         </p>
 
-        <form>
+        <form id="setting-form">
           <div class="form-group">
             <label for="setting">Setting Parameters</label>
             <textarea
               class="form-control"
-              id="setting"
+              id="setting-data"
               aria-describedby="settingHelp"
               style="height: 400px"
             >
@@ -134,6 +139,8 @@
               >Enter your game parameters in JSON format.</small
             >
           </div>
+          <div id="form-warning" class="alert alert-warning" role="alert" style="display:none"></div>
+          <div id="form-success" class="alert alert-success" role="alert" style="display:none"></div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>
@@ -143,5 +150,6 @@
       integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
       crossorigin="anonymous"
     ></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
   </body>
 </html>

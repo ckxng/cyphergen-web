@@ -50,4 +50,4 @@ class Helper(object):
         str
         '''
 
-        return self.app.config.get('APIPATH') + path
+        return self.app.config.get('BASEURI') + path

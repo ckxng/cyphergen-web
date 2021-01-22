@@ -30,10 +30,6 @@ Set the Flask environment variables. FLASK_APP is required.
 
 Base URI of the application
 
-    APIPATH=/api/v1
-
-Path at which to publish the API endpoint
-
     REDIS_URL=redis://:password@hostname:6379
 
 Connection string for Redis.
